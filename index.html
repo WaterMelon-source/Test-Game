@@ -2,67 +2,96 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Из грязи в князи</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="startScreen" class="start-screen">
+<div id="startScreen" class="screen start-screen">
+  <div class="start-art"></div>
   <div class="start-card">
-    <h1 class="game-title">Из грязи<br>в князи</h1>
-    <p class="game-subtitle">Ты проснулся на улице. Ни денег, ни дома, ни будущего.<br>
-    Но у тебя есть руки и голова.<br>Начни с бутылок — закончи особняком.</p>
+    <h1>Из грязи<br>в князи</h1>
+    <p>Ты проснулся на улице. Ни денег, ни дома, ни будущего.<br>Но у тебя есть руки и голова.</p>
     <div class="start-buttons">
       <button class="btn btn-primary" id="btnNewGame">▶ Новая игра</button>
       <button class="btn btn-secondary" id="btnContinue" style="display:none">💾 Продолжить</button>
     </div>
-    <p class="start-hint">Мышь или палец · Автосохранение каждые 30 секунд</p>
   </div>
 </div>
 
-<div id="game" class="game" style="display:none">
+<div id="game" class="game hidden">
+  <!-- HUD -->
   <header class="hud">
-    <button class="burger" id="burgerBtn" aria-label="Меню">☰</button>
-    <div class="hud-money"><span class="money-icon">₽</span><span id="hudMoney">0</span></div>
-    <div class="hud-stat"><div class="stat-label">🍞 Сытость</div><div class="bar"><div class="bar-fill" id="barSatiety"></div></div></div>
-    <div class="hud-stat"><div class="stat-label">❤️ Здоровье</div><div class="bar"><div class="bar-fill" id="barHealth"></div></div></div>
-    <div class="hud-stat"><div class="stat-label">⚡ Энергия</div><div class="bar"><div class="bar-fill" id="barEnergy"></div></div></div>
-    <div class="hud-stat"><div class="stat-label">🚿 Гигиена</div><div class="bar"><div class="bar-fill" id="barHygiene"></div></div></div>
-    <div class="hud-stat"><div class="stat-label">⭐ Репутация</div><div class="bar"><div class="bar-fill" id="barReputation"></div></div></div>
-    <div class="hud-time"><span id="hudWeather">☀️</span> <span id="hudTime">08:00</span> <span id="hudDay">День 1</span></div>
+    <div class="hud-money">₽<span id="hudMoney">0</span></div>
+    <div class="hud-stats">
+      <div class="stat"><div class="stat-ico" id="icoSatiety"></div><div class="bar"><div class="bar-fill" id="barSatiety"></div></div></div>
+      <div class="stat"><div class="stat-ico" id="icoHealth"></div><div class="bar"><div class="bar-fill" id="barHealth"></div></div></div>
+      <div class="stat"><div class="stat-ico" id="icoEnergy"></div><div class="bar"><div class="bar-fill" id="barEnergy"></div></div></div>
+      <div class="stat"><div class="stat-ico" id="icoHygiene"></div><div class="bar"><div class="bar-fill" id="barHygiene"></div></div></div>
+      <div class="stat"><div class="stat-ico" id="icoRep"></div><div class="bar"><div class="bar-fill" id="barReputation"></div></div></div>
+    </div>
+    <div class="hud-time">
+      <div id="hudTimeIcon"></div>
+      <div id="hudTimeText">08:00</div>
+    </div>
   </header>
 
-  <aside class="sidebar" id="sidebar">
-    <button class="side-btn" data-panel="inventory"><span class="side-ico">🎒</span>Инвентарь</button>
-    <button class="side-btn" data-panel="craft"><span class="side-ico">🔧</span>Крафт</button>
-    <button class="side-btn" data-panel="work"><span class="side-ico">💼</span>Работа</button>
-    <button class="side-btn" data-panel="shop"><span class="side-ico">🛒</span>Магазин</button>
-    <button class="side-btn" data-panel="flea"><span class="side-ico">🏪</span>Барахолка</button>
-    <button class="side-btn" data-panel="education"><span class="side-ico">🎓</span>Обучение</button>
-    <button class="side-btn" data-panel="housing"><span class="side-ico">🏠</span>Жильё</button>
-    <button class="side-btn" data-panel="transport"><span class="side-ico">🚗</span>Транспорт</button>
-    <button class="side-btn" data-panel="business"><span class="side-ico">📊</span>Бизнес</button>
-    <button class="side-btn" data-panel="character"><span class="side-ico">👤</span>Персонаж</button>
-    <button class="side-btn" data-panel="quests"><span class="side-ico">📜</span>Журнал</button>
-    <button class="side-btn" data-panel="settings"><span class="side-ico">⚙️</span>Настройки</button>
-  </aside>
-  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+  <!-- Основной экран (локация) -->
+  <main id="locationScreen" class="location-screen">
+    <div id="locationBg" class="location-bg"></div>
+    <div class="time-overlay" id="timeOverlay"></div>
+    
+    <div class="character-area">
+      <div id="characterSprite" class="character-sprite"></div>
+    </div>
 
-  <main class="map-area">
-    <canvas id="mapCanvas" width="1600" height="1000"></canvas>
-    <div id="mapLocations"></div>
-    <div id="mapPlayer" class="map-player"></div>
-    <div class="map-hint" id="mapHint">Кликните на локацию, чтобы пойти</div>
-    <div id="tutorialPanel" class="tutorial-panel" style="display:none">
-      <div class="tutorial-icon">💡</div>
-      <div class="tutorial-text">
-        <div class="tutorial-title">Обучение</div>
-        <div class="tutorial-body" id="tutorialBody">...</div>
-      </div>
-      <button class="tutorial-skip" id="tutorialSkip" title="Скрыть">×</button>
+    <div class="location-panel">
+      <h2 id="locName">Улица</h2>
+      <p id="locDesc">Холодно, сыро. Надо что-то делать.</p>
+      <div id="locActions" class="action-grid"></div>
     </div>
   </main>
+
+  <!-- Карта -->
+  <main id="mapScreen" class="map-screen hidden">
+    <canvas id="mapCanvas"></canvas>
+    <div id="mapTimeOverlay" class="time-overlay"></div>
+    <div id="mapLocations"></div>
+    <div id="mapPlayer" class="map-player hidden"></div>
+    <button class="back-btn" id="btnBackFromMap">← Назад</button>
+  </main>
+
+  <!-- Нижнее меню -->
+  <nav class="bottom-nav">
+    <button class="nav-btn" id="navMap" title="Карта">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+      <span>Карта</span>
+    </button>
+    <button class="nav-btn" id="navInv" title="Инвентарь">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v12H4z"/><path d="M9 6V4h6v2"/></svg>
+      <span>Сумка</span>
+    </button>
+    <button class="nav-btn" id="navChar" title="Персонаж">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Я</span>
+    </button>
+    <button class="nav-btn" id="navQuests" title="Квесты">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span>Квесты</span>
+    </button>
+    <button class="nav-btn" id="navSettings" title="Настройки">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Настр.</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ТУТОРИАЛ -->
+<div id="tutorialToast" class="tutorial-toast hidden">
+  <div class="tut-icon">💡</div>
+  <div class="tut-text" id="tutText">...</div>
+  <button class="tut-close" id="tutClose">×</button>
 </div>
 
 <div id="toastArea" class="toast-area"></div>
